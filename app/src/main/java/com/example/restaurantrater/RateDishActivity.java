@@ -3,6 +3,7 @@ package com.example.restaurantrater;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 
 import androidx.activity.EdgeToEdge;
@@ -34,24 +35,24 @@ public class RateDishActivity extends AppCompatActivity {
         Intent intent = getIntent();
         restaurantId = intent.getIntExtra("restaurant_id", -1);
         currentDish = new Dish();
-        initRatingBar();
         initSaveButton();
-    }
-
-    private void initRatingBar() {
-        dishRating = findViewById(R.id.ratingBar);
     }
 
     private void initSaveButton() {
         Button saveButton = findViewById(R.id.rateSaveButton);
         saveButton.setOnClickListener(v -> {
+            dishRating = findViewById(R.id.ratingBar);
+            EditText dishNameET = findViewById(R.id.dishNameEditText);
+            EditText dishTypeET = findViewById(R.id.dishTypeEditText);
             currentDish.setDishRating(dishRating.getRating());
             currentDish.setRestaurantId(restaurantId);
+            currentDish.setDishName(dishNameET.getText().toString());
+            currentDish.setDishType(dishTypeET.getText().toString());
 
             RestaurantRaterDataSource ds = new RestaurantRaterDataSource(this);
             try {
                 ds.open();
-                if (currentDish.getRestaurantId() == -1) {
+                if (currentDish.getDishId() == -1) {
                     boolean wasInserted = ds.insertDish(currentDish);
                     if (wasInserted) {
                         int newDishId = ds.getLastDishId();

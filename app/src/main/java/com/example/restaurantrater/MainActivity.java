@@ -36,12 +36,24 @@ public class MainActivity extends AppCompatActivity {
     private void initSaveButton() {
         Button saveBtn = findViewById(R.id.mainSaveButton);
         saveBtn.setOnClickListener(v -> {
+            EditText restaurantNameET = findViewById(R.id.restaurantNameEditText);
+            EditText streetAddressET = findViewById(R.id.editAddress);
+            EditText cityET = findViewById(R.id.editCity);
+            EditText stateET = findViewById(R.id.editState);
+            EditText zipcodeET = findViewById(R.id.editZipcode);
+
+            currentRestaurant.setRestaurantName(restaurantNameET.getText().toString());
+            currentRestaurant.setStreetAddress(streetAddressET.getText().toString());
+            currentRestaurant.setCity(cityET.getText().toString());
+            currentRestaurant.setState(stateET.getText().toString());
+            currentRestaurant.setZipcode(zipcodeET.getText().toString());
+
             boolean didSucceed;
             RestaurantRaterDataSource ds = new RestaurantRaterDataSource(MainActivity.this);
             try {
                 ds.open();
 
-                if (currentRestaurant.getRestaurantId() == 1) {
+                if (currentRestaurant.getRestaurantId() == -1) {
                     didSucceed = ds.insertRestaurant(currentRestaurant);
                     if (didSucceed) {
                         int newRestaurantId = ds.getLastRestaurantId();
@@ -86,6 +98,4 @@ public class MainActivity extends AppCompatActivity {
             zipcodeET.setText("");
         });
     }
-
-
 }

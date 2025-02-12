@@ -27,27 +27,27 @@ public class Dish {
         dishName = s;
     }
 
-    private String getDishType() {
+    public String getDishType() {
         return dishType;
     }
 
-    private void setDishType(String s) {
+    public void setDishType(String s) {
         dishType = s;
     }
 
-    private float getDishRating() {
+    public float getDishRating() {
         return dishRating;
     }
 
-    private void setDishRating(float f) {
+    public void setDishRating(float f) {
         dishRating = f;
     }
 
-    private int getRestaurantId() {
+    public int getRestaurantId() {
         return restaurantId;
     }
 
-    private void setRestaurantId(int i) {
+    public void setRestaurantId(int i) {
         restaurantId = i;
     }
 

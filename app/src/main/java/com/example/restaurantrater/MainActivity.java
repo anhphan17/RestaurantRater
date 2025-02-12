@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         initSaveButton();
         initRateButton();
         initCancelButton();
+
+        currentRestaurant = new Restaurant();
     }
 
     private void initSaveButton() {
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     ds.updateRestaurant(currentRestaurant);
                 }
-                ds.close();
             }
             catch (Exception e) {
                 e.printStackTrace();

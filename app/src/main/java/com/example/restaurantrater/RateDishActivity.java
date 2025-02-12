@@ -36,6 +36,8 @@ public class RateDishActivity extends AppCompatActivity {
         restaurantId = intent.getIntExtra("restaurant_id", -1);
         currentDish = new Dish();
         initSaveButton();
+        initClearButton();
+        initBackButton();
     }
 
     private void initSaveButton() {
@@ -68,7 +70,34 @@ public class RateDishActivity extends AppCompatActivity {
             }
             finally {
                 ds.close();
+                finish();
             }
         });
     }
+
+    private void clear() {
+        EditText dishNameET = findViewById(R.id.dishNameEditText);
+        EditText dishTypeET = findViewById(R.id.dishTypeEditText);
+        RatingBar ratingBar = findViewById(R.id.ratingBar);
+
+        dishNameET.setText("");
+        dishTypeET.setText("");
+        ratingBar.setRating(0);
+    }
+
+    private void initClearButton() {
+        Button clearButton = findViewById(R.id.rateClearButton);
+        clearButton.setOnClickListener(v -> {
+            clear();
+        });
+    }
+
+    private void initBackButton() {
+        Button backBtn = findViewById(R.id.rateBackButton);
+        backBtn.setOnClickListener(v -> {
+            clear();
+            finish();
+        });
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.example.restaurantrater;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +53,10 @@ public class RateDishActivity extends AppCompatActivity {
             currentDish.setDishName(dishNameET.getText().toString());
             currentDish.setDishType(dishTypeET.getText().toString());
 
+            TextView savedMessageTV = findViewById(R.id.rateSavedMessageTV);
+            Resources res = getResources();
+            String savedMessageStr = res.getString(R.string.confirmed_save_message);
+
             RestaurantRaterDataSource ds = new RestaurantRaterDataSource(this);
             try {
                 ds.open();
@@ -70,6 +76,7 @@ public class RateDishActivity extends AppCompatActivity {
             }
             finally {
                 ds.close();
+                savedMessageTV.setText(savedMessageStr);
                 finish();
             }
         });

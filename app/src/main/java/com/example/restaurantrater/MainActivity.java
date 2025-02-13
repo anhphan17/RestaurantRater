@@ -1,6 +1,7 @@
 package com.example.restaurantrater;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
             currentRestaurant.setState(stateET.getText().toString());
             currentRestaurant.setZipcode(zipcodeET.getText().toString());
 
+            TextView savedMessageTV = findViewById(R.id.mainSavedMessageTV);
+            Resources res = getResources();
+            String savedMessageStr = res.getString(R.string.confirmed_save_message);
+
             boolean didSucceed;
             RestaurantRaterDataSource ds = new RestaurantRaterDataSource(MainActivity.this);
             try {
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
             finally {
                 ds.close();
+                savedMessageTV.setText(savedMessageStr);
             }
         });
     }
@@ -76,6 +82,46 @@ public class MainActivity extends AppCompatActivity {
     private void initRateButton() {
         Button rateButton = findViewById(R.id.rateButton);
         rateButton.setOnClickListener(v -> {
+            EditText restaurantNameET = findViewById(R.id.restaurantNameEditText);
+            EditText streetAddressET = findViewById(R.id.editAddress);
+            EditText cityET = findViewById(R.id.editCity);
+            EditText stateET = findViewById(R.id.editState);
+            EditText zipcodeET = findViewById(R.id.editZipcode);
+
+            currentRestaurant.setRestaurantName(restaurantNameET.getText().toString());
+            currentRestaurant.setStreetAddress(streetAddressET.getText().toString());
+            currentRestaurant.setCity(cityET.getText().toString());
+            currentRestaurant.setState(stateET.getText().toString());
+            currentRestaurant.setZipcode(zipcodeET.getText().toString());
+
+            TextView savedMessageTV = findViewById(R.id.mainSavedMessageTV);
+            Resources res = getResources();
+            String savedMessageStr = res.getString(R.string.confirmed_save_message);
+
+            boolean didSucceed;
+            RestaurantRaterDataSource ds = new RestaurantRaterDataSource(MainActivity.this);
+            try {
+                ds.open();
+
+                if (currentRestaurant.getRestaurantId() == -1) {
+                    didSucceed = ds.insertRestaurant(currentRestaurant);
+                    if (didSucceed) {
+                        int newRestaurantId = ds.getLastRestaurantId();
+                        currentRestaurant.setRestaurantId(newRestaurantId);
+                    }
+                }
+                else {
+                    ds.updateRestaurant(currentRestaurant);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                ds.close();
+                savedMessageTV.setText(savedMessageStr);
+            }
+
             Intent intent = new Intent(MainActivity.this, RateDishActivity.class);
             intent.putExtra("restaurant_id", currentRestaurant.getRestaurantId());
             startActivity(intent);
